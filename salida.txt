@@ -1,0 +1,11 @@
+("Camino encontrado:['Salina Cruz', 'Tehuantepec', 'Oaxaca', 'Puebla', "
+ "'Orizaba', 'Cordoba', 'Acayucan', 'Veracruz', 'Poza Rica', 'Tuxpan', "
+ "'Tampico', 'Matamoros', 'Reynosa'] Distancia:2369[Km] Nodos "
+ "seguidos:{'Xalapa', 'Villahermosa', 'Comitán', 'Chetumal', 'San Cristóbal', "
+ "'Oaxaca', 'Cordoba', 'Pijijiapan', 'Tonalá', 'Tuxtla Gutiérrez', 'Acayucan', "
+ "'Huatulco', 'Ciudad de México', 'Ocosingo', 'Tuxpan', 'Orizaba', 'Palenque', "
+ "'Coatzacoalcos', 'Reynosa', 'Playa del Carmen', 'Juchitan', 'Salina Cruz', "
+ "'Cancún', 'Mérida', 'Cárdenas', 'Puerto Escondido', 'Poza Rica', 'Ixtepec', "
+ "'Ciudad del Carmen', 'Juchitán', 'Ixtaltepec', 'Huixtla', 'Tapachula', "
+ "'Veracruz', 'Campeche', 'Puebla', 'Tampico', 'Tehuantepec', 'Minatitlán', "
+ "'Matamoros'} resultado:Exito")

@@ -1,7 +1,7 @@
 import pprint
 import os
 import sys
-
+import json 
 # Breadth First Search Method (Busqueda en Amplitud)
 def amplitud(grafo, inicio, destino):
     cola = [(inicio, [inicio], 0)]
@@ -46,16 +46,26 @@ def primero_el_mejor(grafo, inicio, destino):
     ant = inicio
     while cola:
         (node, camino, costo) = cola.pop(0)
+        integ = 0
         for temp in grafo[node].keys():
             visitados.add(temp)
             if temp == destino:
                 return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
-                if temp not in visitado and temp != "distancia" and grafo[temp]["distancia"] + grafo[node][temp] <= grafo[ant]["distancia"] + grafo[node][temp]:
-                    visitado.add(temp)
-                    cola.append((temp, camino + [temp], costo + grafo[node][temp]))
-                    ant = temp
+                if temp != "distancia":
+                    print(grafo[temp])
+                    print(temp)
+                    if temp not in visitado and grafo[temp]["distancia"] != -1:
+                        integ -= -1
+                        visitado.add(temp)
+                        cola.append((temp, camino + [temp], costo + grafo[node][temp]))
+                        ant = temp
     return (camino + [temp],costo + grafo[node][temp]),(visitados),"Fracaso"
+    
+def imprimir_resultado(res):
+    pp.pprint("Camino encontrado:{} Distancia:{}[Km] Nodos seguidos:{} resultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+    with open(sys.argv[2], 'w') as f:
+        f.write(pprint.pformat("Camino encontrado:{} Distancia:{}[Km] Nodos seguidos:{} resultado:{}".format(res[0][0],res[0][1],res[1],res[2]),indent=4))
 
 if __name__ == "__main__":
     # Pprint para mostrar de forma Pretty
@@ -63,7 +73,7 @@ if __name__ == "__main__":
     # Grafo principal
     grafo_principal = {}
 
-    # Lee el archivo .txt y carga el grafo_principal
+    # Lee el archivo .csv y carga el grafo_principal
     sys.argv[1]
     with open(sys.argv[1], 'r') as f:
         for l in f:
@@ -75,7 +85,7 @@ if __name__ == "__main__":
             if ciudad_b not in grafo_principal:
                 grafo_principal[ciudad_b] = {}
             grafo_principal[ciudad_b][ciudad_a] = int(costo)
-            grafo_principal[ciudad_b]["distancia"] = int(distancia)
+            grafo_principal[ciudad_b]["distancia"] = -1
     n = 1
     while n == 1:
         os.system("clear")
@@ -102,8 +112,7 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
     ============================================""")
-            res = amplitud(grafo_principal, inicio, destino)
-            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+            imprimir_resultado(amplitud(grafo_principal, inicio, destino))
             print("============================================")
             input()
 
@@ -119,8 +128,7 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
                     ============================================""")
-            res = profundidad(grafo_principal, inicio, destino)
-            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+            imprimir_resultado(profundidad(grafo_principal, inicio, destino))
             print("============================================")
             input()
 
@@ -136,8 +144,7 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
     ============================================""")
-            res = primero_el_mejor(grafo_principal, inicio, destino)
-            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+            imprimir_resultado(primero_el_mejor(grafo_principal, inicio, destino))
             print("============================================")
             input()
 
