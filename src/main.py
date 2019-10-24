@@ -6,35 +6,56 @@ import sys
 def amplitud(grafo, inicio, destino):
     cola = [(inicio, [inicio], 0)]
     visitado = {inicio}
+    visitados = {inicio}
     while cola:
         (node, camino, costo) = cola.pop(0)
         for temp in grafo[node].keys():
+            if temp != "distancia":
+                visitados.add(temp)
             if temp == destino:
-                return camino + [temp], costo + grafo[node][temp]
+                return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
-                if temp not in visitado:
+                if temp not in visitado and temp != "distancia":
                     visitado.add(temp)
                     cola.append((temp, camino + [temp], costo + grafo[node][temp]))
-
+    return (camino + [temp], costo + grafo[node][temp]),(visitados),"Fracaso"
 
 # Depth First Search Method (Busqueda en Profundidad)
 def profundidad(grafo, inicio, destino):
     pila = [(inicio, [inicio], 0)]
     visitado = {inicio}
+    visitados = {inicio}
     while pila:
         (node, camino, costo) = pila.pop()
         for temp in grafo[node].keys():
+            if temp != "distancia":
+                visitados.add(temp)
             if temp == destino:
-                return camino + [temp], costo + grafo[node][temp]
+                return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
-                if temp not in visitado:
+                if temp not in visitado and temp != "distancia":
                     visitado.add(temp)
                     pila.append((temp, camino + [temp], costo + grafo[node][temp]))
+    return (camino + [temp], costo + grafo[node][temp]),(visitados),"Fracaso"
 
 # Best First search (Busqueda Primero el Mejor)
-def Primero_el_mejor(grafo, inicio, destino):
-    #Metodo
-    pass
+def primero_el_mejor(grafo, inicio, destino):
+    cola = [(inicio, [inicio], 0)]
+    visitado = {inicio}
+    visitados = {inicio}
+    ant = inicio
+    while cola:
+        (node, camino, costo) = cola.pop(0)
+        for temp in grafo[node].keys():
+            visitados.add(temp)
+            if temp == destino:
+                return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
+            else:
+                if temp not in visitado and temp != "distancia" and grafo[temp]["distancia"] + grafo[node][temp] <= grafo[ant]["distancia"] + grafo[node][temp]:
+                    visitado.add(temp)
+                    cola.append((temp, camino + [temp], costo + grafo[node][temp]))
+                    ant = temp
+    return (camino + [temp],costo + grafo[node][temp]),(visitados),"Fracaso"
 
 if __name__ == "__main__":
     # Pprint para mostrar de forma Pretty
@@ -50,9 +71,11 @@ if __name__ == "__main__":
             if ciudad_a not in grafo_principal:
                 grafo_principal[ciudad_a] = {}
             grafo_principal[ciudad_a][ciudad_b] = int(costo)
+            grafo_principal[ciudad_a]["distancia"] = int(distancia)
             if ciudad_b not in grafo_principal:
                 grafo_principal[ciudad_b] = {}
             grafo_principal[ciudad_b][ciudad_a] = int(costo)
+            grafo_principal[ciudad_b]["distancia"] = int(distancia)
     n = 1
     while n == 1:
         os.system("clear")
@@ -79,7 +102,8 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
     ============================================""")
-            print (amplitud(grafo_principal, inicio, destino))
+            res = amplitud(grafo_principal, inicio, destino)
+            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
             print("============================================")
             input()
 
@@ -95,7 +119,8 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
                     ============================================""")
-            print (profundidad(grafo_principal, inicio, destino))
+            res = profundidad(grafo_principal, inicio, destino)
+            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
             print("============================================")
             input()
 
@@ -111,7 +136,8 @@ if __name__ == "__main__":
             print("""============================================
                     Resultados
     ============================================""")
-            print(primero_el_mejor(grafo_principal, inicio, destino))
+            res = primero_el_mejor(grafo_principal, inicio, destino)
+            print ("Camino encontrado:{}\nDistancia:{}[Km]\nNodos seguidos:{}\nresultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
             print("============================================")
             input()
 
