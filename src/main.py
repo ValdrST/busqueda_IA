@@ -43,29 +43,30 @@ def primero_el_mejor(grafo, inicio, destino):
     cola = [(inicio, [inicio], 0)]
     visitado = {inicio}
     visitados = {inicio}
-    ant = inicio
     while cola:
         (node, camino, costo) = cola.pop(0)
         integ = 0
-        for temp in grafo[node].keys():
+        heuristico = {}
+        for temp in grafo[node]:
+            if temp != "distancia":
+                heuristico[temp] = grafo[temp]["distancia"]
+            
+        print(sorted(heuristico,key=heuristico.__getitem__))
+        for temp in sorted(heuristico,key=heuristico.__getitem__):
             visitados.add(temp)
             if temp == destino:
                 return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
                 if temp != "distancia":
-                    print(grafo[temp])
-                    print(temp)
-                    if temp not in visitado and grafo[temp]["distancia"] != -1:
-                        integ -= -1
+                    if temp not in visitado:
                         visitado.add(temp)
                         cola.append((temp, camino + [temp], costo + grafo[node][temp]))
-                        ant = temp
     return (camino + [temp],costo + grafo[node][temp]),(visitados),"Fracaso"
-    
-def imprimir_resultado(res):
-    pp.pprint("Camino encontrado:{} Distancia:{}[Km] Nodos seguidos:{} resultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+
+def imprimir_resultado(res:dict):
+    print("Camino encontrado:{}\n\n Distancia:{}[Km]\n\n Nodos seguidos:{}\n\n resultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
     with open(sys.argv[2], 'w') as f:
-        f.write(pprint.pformat("Camino encontrado:{} Distancia:{}[Km] Nodos seguidos:{} resultado:{}".format(res[0][0],res[0][1],res[1],res[2]),indent=4))
+        f.write(json.JSONEncoder().encode({"Camino encontrado":list(res[0][0]),"Distancia":int(res[0][1]),"Nodos segidos":list(res[1]),"Resultado":bool(res[2])}))
 
 if __name__ == "__main__":
     # Pprint para mostrar de forma Pretty
@@ -85,7 +86,7 @@ if __name__ == "__main__":
             if ciudad_b not in grafo_principal:
                 grafo_principal[ciudad_b] = {}
             grafo_principal[ciudad_b][ciudad_a] = int(costo)
-            grafo_principal[ciudad_b]["distancia"] = -1
+            grafo_principal[ciudad_b]["distancia"] = 3000
     n = 1
     while n == 1:
         os.system("clear")
