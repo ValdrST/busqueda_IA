@@ -6,16 +6,16 @@ import json
 def amplitud(grafo, inicio, destino):
     cola = [(inicio, [inicio], 0)]
     visitado = {inicio}
-    visitados = {inicio}
+    visitados = [inicio]
     while cola:
         (node, camino, costo) = cola.pop(0)
         for temp in grafo[node].keys():
-            if temp != "distancia":
-                visitados.add(temp)
             if temp == destino:
+                visitados.append(temp)
                 return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
                 if temp not in visitado and temp != "distancia":
+                    visitados.append(temp)
                     visitado.add(temp)
                     cola.append((temp, camino + [temp], costo + grafo[node][temp]))
     return (camino + [temp], costo + grafo[node][temp]),(visitados),"Fracaso"
@@ -24,16 +24,16 @@ def amplitud(grafo, inicio, destino):
 def profundidad(grafo, inicio, destino):
     pila = [(inicio, [inicio], 0)]
     visitado = {inicio}
-    visitados = {inicio}
+    visitados = [inicio]
     while pila:
         (node, camino, costo) = pila.pop()
         for temp in grafo[node].keys():
-            if temp != "distancia":
-                visitados.add(temp)
             if temp == destino:
+                visitados.append(temp)
                 return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
                 if temp not in visitado and temp != "distancia":
+                    visitados.append(temp)
                     visitado.add(temp)
                     pila.append((temp, camino + [temp], costo + grafo[node][temp]))
     return (camino + [temp], costo + grafo[node][temp]),(visitados),"Fracaso"
@@ -42,7 +42,7 @@ def profundidad(grafo, inicio, destino):
 def primero_el_mejor(grafo, inicio, destino):
     cola = [(inicio, [inicio], 0)]
     visitado = {inicio}
-    visitados = {inicio}
+    visitados = [inicio]
     while cola:
         (node, camino, costo) = cola.pop(0)
         integ = 0
@@ -50,23 +50,22 @@ def primero_el_mejor(grafo, inicio, destino):
         for temp in grafo[node]:
             if temp != "distancia":
                 heuristico[temp] = grafo[temp]["distancia"]
-            
-        print(sorted(heuristico,key=heuristico.__getitem__))
         for temp in sorted(heuristico,key=heuristico.__getitem__):
-            visitados.add(temp)
             if temp == destino:
+                visitados.append(temp)
                 return (camino + [temp], costo + grafo[node][temp]),(visitados),"Exito"
             else:
                 if temp != "distancia":
                     if temp not in visitado:
+                        visitados.append(temp)
                         visitado.add(temp)
                         cola.append((temp, camino + [temp], costo + grafo[node][temp]))
     return (camino + [temp],costo + grafo[node][temp]),(visitados),"Fracaso"
 
 def imprimir_resultado(res:dict):
     print("Camino encontrado:{}\n\n Distancia:{}[Km]\n\n Nodos seguidos:{}\n\n resultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
-    with open(sys.argv[2], 'w') as f:
-        f.write(json.JSONEncoder().encode({"Camino encontrado":list(res[0][0]),"Distancia":int(res[0][1]),"Nodos segidos":list(res[1]),"Resultado":bool(res[2])}))
+    with open(sys.argv[2], 'w',encoding='utf8') as f:
+        f.write(json.JSONEncoder().encode({"Camino encontrado":list(res[0][0]),"Distancia":int(res[0][1]),"Nodos segidos":list(res[1]),"Resultado":bool(res[2])},))
 
 if __name__ == "__main__":
     # Pprint para mostrar de forma Pretty
