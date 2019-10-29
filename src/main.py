@@ -63,7 +63,7 @@ def primero_el_mejor(grafo, inicio, destino):
     return (camino + [temp],costo + grafo[node][temp]),(visitados),"Fracaso"
 
 def imprimir_resultado(res:dict):
-    print("Camino encontrado:{}\n\n Distancia:{}[Km]\n\n Nodos seguidos:{}\n\n resultado:{}".format(res[0][0],res[0][1],res[1],res[2]))
+    print("Camino encontrado:{}\n\n Distancia:{}[Km]\n\n Nodos seguidos:{}\nNumero de nodos:{}\n resultado:{}".format(res[0][0],res[0][1],res[1],len(res[1]),res[2]))
     with open(sys.argv[2], 'w',encoding='utf8') as f:
         f.write(json.JSONEncoder().encode({"Camino encontrado":list(res[0][0]),"Distancia":int(res[0][1]),"Nodos segidos":list(res[1]),"Resultado":bool(res[2])},))
 
